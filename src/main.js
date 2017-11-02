@@ -273,7 +273,7 @@ D̸͟͞E̸͟͞S̸͟͞T̸͟͞R̸͟͞O̸͟͞Y̸͟͞E̸͟͞R̸͟͞ T̸͟͞E̸͟͞A�
         }
 
         if(operation.type == 13) { // diinvite
-            if(isAdminOrBot(operation.param2) && !isAdminOrBot(operation.param2)) {
+            if(isAdminOrBot(operation.param2)) {
                 return this._acceptGroupInvitation(operation.param1)
             } else {
                 return this._cancel(operation.param1,operation.param2);
