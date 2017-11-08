@@ -77,13 +77,11 @@ D̸͟͞E̸͟͞S̸͟͞T̸͟͞R̸͟͞O̸͟͞Y̸͟͞E̸͟͞R̸͟͞ T̸͟͞E̸͟͞A�
 ▫Mute\n\
 ▫unmute\n\
 ▫Kill「@」\n\
-▫Add staff\n\
-▫Del staff\n\
-▫Zer:CreateGroup\n\
 ▫addcontact\n\
 ▫spam\n\
 ▫Tagall\n\
 ▫Gurl\n\
+▫Open/Close url\n\
 ▫Bc [broadcast]\n\
 ▫Dat [Date/time]\n\
 ▫Sb [statusbot]\n\
@@ -94,6 +92,13 @@ D̸͟͞E̸͟͞S̸͟͞T̸͟͞R̸͟͞O̸͟͞Y̸͟͞E̸͟͞R̸͟͞ T̸͟͞E̸͟͞A�
 ▫cancel\n\
 ▫botleft\n\
 ▫L:bye\n\
+========================\n\
+¤> Salam on/off\n\
+¤> Qr on/off\n\
+¤> Kick on/off\n\
+¤> Cancel on/off\n\
+¤> Reinvite on/off\n\
+¤> Protection on/off\n\
 ========================\n\
 |  D̸͟͞E̸͟͞S̸͟͞T̸͟͞R̸͟͞O̸͟͞Y̸͟͞E̸͟͞R̸͟͞ T̸͟͞E̸͟͞A̸͟͞M̸͟͞.  |\n\
 ========================";
@@ -120,7 +125,7 @@ D̸͟͞E̸͟͞S̸͟͞T̸͟͞R̸͟͞O̸͟͞Y̸͟͞E̸͟͞R̸͟͞ T̸͟͞E̸͟͞A�
             if(waitMsg == "yes" && operation.message.from_ == vx[0] && this.stateStatus.mute != 1){
 				this.textMessage(txt,message,message.text)
 			}else if(this.stateStatus.mute != 1){this.textMessage(txt,message);
-			}else if(txt == "unmute" && isAdminOrBot(operation.message.from_) && this.stateStatus.mute == 1){
+			}else if(txt == "Unmute" && isAdminOrBot(operation.message.from_) && this.stateStatus.mute == 1){
 			    this.stateStatus.mute = 0;
 			    this._sendMessage(message,"ヽ(^。^)ノ")
 		    }else{console.info("muted");}
@@ -543,15 +548,7 @@ D̸͟͞E̸͟͞S̸͟͞T̸͟͞R̸͟͞O̸͟͞Y̸͟͞E̸͟͞R̸͟͞ T̸͟͞E̸͟͞A�
       
       //============COMMAND==========
 
-         //Zer:CreateGroup <jumlah>-<NamaGrup>/<mid>
-         //Zer:CreateGroup 100-NamaGrupnya/midkorban
-        if(cmd == 'Zer:CreateGroup' && isAdminOrBot(seq.from)) { 
-            const [ j, u ] = payload.split('-');
-            const [ n, m ] = u.split('/');
-            for (var i = 0; i < j; i++) {
-                this._createGroup(`${n}`,[m]);
-            }
-        }
+       
       
         if(txt == 'dat' && isAdminOrBot(seq.from_))  {
                let menit = ['01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31','32','33','34','35','36','37','38','39','40','41','42','43','44','45','46','47','48','49','50','51','52','53','54','55','56','57','58','59','00'];
@@ -578,7 +575,7 @@ D̸͟͞E̸͟͞S̸͟͞T̸͟͞R̸͟͞O̸͟͞Y̸͟͞E̸͟͞R̸͟͞ T̸͟͞E̸͟͞A�
         }
       
         if(txt == 'rn' && isAdminOrBot(seq.from_)) {
-            this._sendMessage(seq, 'Lцғғұ');
+            this._sendMessage(seq, 'Ready...');
         }
       
         if(txt == 'gift') {
@@ -1199,6 +1196,22 @@ D̸͟͞E̸͟͞S̸͟͞T̸͟͞R̸͟͞O̸͟͞Y̸͟͞E̸͟͞R̸͟͞ T̸͟͞E̸͟͞A�
             this._client.sendMessage(0,bang);
         }else if(txt == 'ginfo' && isBanned(banList, seq.from_)){this._sendMessage(seq,"Not permitted !");}
 
+	     const joinByUrl = ['open url','close url'];
+        if(joinByUrl.includes(txt) && isStaffOrBot(seq.from)) {
+           // this._sendMessage(seq,`Tunggu Sebentar ...`);
+            let updateGroup = await this._getGroup(seq.to);
+            updateGroup.preventJoinByTicket = true;
+            if(txt == 'open url') {
+                if(isAdminOrBot(seq.from)) {
+                updateGroup.preventJoinByTicket = false;
+                const groupUrl = await this._reissueGroupTicket(seq.to)
+                this._sendMessage(seq,`Link Group = line://ti/g/${groupUrl}`);
+                }
+            }
+            await this._updateGroup(updateGroup);
+        }
+
+	  	    
         const joinByUrl = ['gurl'];
         if(joinByUrl.includes(txt)) {
           if(isAdminOrBot(seq.from_)) {
